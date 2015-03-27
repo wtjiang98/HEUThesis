@@ -1,0 +1,911 @@
+% !TEX TS-program = XeLaTeX
+% !TEX encoding = UTF-8 Unicode
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  哈尔滨工程大学学位论文 XeLaTeX 模版 —— 格式文件 format.tex
+%
+%  版本：1.0.0
+%  最后更新：
+%  修改者：Leo LiWenhui lwh@hrbeu.edu.cn
+%  修订者：
+%  编译环境1：Ubuntu 12.04 + TeXLive 2013/2014
+%  编译环境2：Windows 7/8  + TeXLive 2013/2014
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 页面设置
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% A4 纸张
+\setlength{\paperwidth}{210mm}
+\setlength{\paperheight}{297mm}
+
+% 设置正文尺寸大小
+\setlength{\textwidth}{160mm}
+\setlength{\textheight}{241mm}
+
+% 设置正文区在正中间
+\newlength \mymargin
+\setlength{\mymargin}{(\paperwidth-\textwidth)/2}
+\setlength{\oddsidemargin}{(\mymargin)-1in}
+\setlength{\evensidemargin}{(\mymargin)-1in}
+
+% 设置正文区偏移量，奇数页向右偏，偶数页向左偏
+\newlength \myshift
+\setlength{\myshift}{0mm}    % 双面打印的奇偶页偏移值，可根据需要修改，建议小于 5mm
+\addtolength{\oddsidemargin}{\myshift}
+\addtolength{\evensidemargin}{-\myshift}
+
+% 页眉页脚相关距离设置
+\setlength{\voffset}{-5.4mm} % 设置水平基线位置
+\setlength{\topmargin}{0mm}  % 设置页眉距水平基线位置
+\setlength{\headheight}{5mm} % 设置页眉高度
+\setlength{\headsep}{8mm}    % 页眉与正文的距离
+\setlength{\footskip}{8mm}   % 页脚与正文距离
+
+% 公式的精调
+\allowdisplaybreaks[4]  % 可以让公式在排不下的时候分页排，这可避免页面有大段空白。
+
+% 下面这组命令使浮动对象的缺省值稍微宽松一点，从而防止幅度
+% 对象占据过多的文本页面，也可以防止在很大空白的浮动页上放置很小的图形。
+\renewcommand{\topfraction}{0.9999999}
+\renewcommand{\textfraction}{0.0000001}
+\renewcommand{\floatpagefraction}{0.9999}
+
+% defaultfont 默认字体命令
+\def\defaultfont{\renewcommand{\baselinestretch}{1.25} \daxiaosi}
+%  \fontsize{12pt}{15pt}\selectfont}
+
+% 设置目录字体和行间距
+\def\defaultmenufont{\renewcommand{\baselinestretch}{1.22} \xiaosi}
+%  \fontsize{12pt}{15pt}\selectfont}
+
+% 固定距离内容填入及下划线
+\makeatletter
+\newcommand\fixeddistanceleft[2][10mm]{{\hb@xt@ #1{#2\hss}}}
+\newcommand\fixeddistancecenter[2][10mm]{{\hb@xt@ #1{\hss#2\hss}}}
+\newcommand\fixeddistanceright[2][10mm]{{\hb@xt@ #1{\hss#2}}}
+\newcommand\fixedunderlineleft[2][10mm]{\underline{\hb@xt@ #1{#2\hss}}}
+\newcommand\fixedunderlinecenter[2][10mm]{\underline{\hb@xt@ #1{\hss#2\hss}}}
+\newcommand\fixedunderlineright[2][10mm]{\underline{\hb@xt@ #1{\hss#2}}}
+\makeatother
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 标题环境相关
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%判断单双面打印类型
+\newif\ifoneortwosidetwoside
+\newif\ifoneortwosideoneside
+
+\def\temp{twoside}
+\ifx\temp\oneortwoside
+  \oneortwosidetwosidetrue  \oneortwosideonesidefalse
+\fi
+
+\def\temp{oneside}
+\ifx\temp\oneortwoside
+  \oneortwosidetwosidefalse  \oneortwosideonesidetrue
+\fi
+
+%判断论文类型
+% 声明三个论文类型逻辑型变量
+\newif\ifxueweidoctor
+\newif\ifxueweimaster
+\newif\ifxueweibachelor
+
+% 根据 \xuewei 的定义为 \xueweidoctor \xueweimaster \xueweibachelor 赋值
+\def\temp{Doctor}
+\ifx\temp\xuewei % \ifx 用于判断两个变量是否匹配
+  \xueweidoctortrue  \xueweimasterfalse \xueweibachelorfalse
+\fi
+\def\temp{Master}
+\ifx\temp\xuewei
+  \xueweidoctorfalse  \xueweimastertrue \xueweibachelorfalse
+\fi
+\def\temp{Bachelor}
+\ifx\temp\xuewei
+  \xueweidoctorfalse  \xueweimasterfalse \xueweibachelortrue
+\fi
+
+\ifxueweidoctor
+  \newcommand{\cnxuewei}{博士}
+  \newcommand{\enxuewei}{Doctor}
+\fi
+
+\ifxueweimaster
+  \newcommand{\cnxuewei}{硕士}
+  \newcommand{\enxuewei}{Master}
+\fi
+
+\ifxueweibachelor
+  \newcommand{\cnxuewei}{学士}
+  \newcommand{\enxuewei}{Bachelor}
+\fi
+
+%定义 学科 学位
+\def \xuekeEngineering {Engineering}
+\def \xuekeScience     {Science}
+\def \xuekeManagement  {Management}
+\def \xuekeArts        {Arts}
+\def \xuekePhilosophy  {Philosophy}
+\def \xuekeEconomics   {Economics}
+\def \xuekeLaws        {Laws}
+\def \xuekeEducation   {Education}
+\def \xuekeHistory     {History}
+
+
+\ifx \xueke \xuekeEngineering
+\newcommand{\cnxueke}{工学}
+\newcommand{\enxueke}{Engineering}
+\newcommand{\enxk}   {Eng}
+\fi
+
+\ifx \xueke \xuekeScience
+\newcommand{\cnxueke}{理学}
+\newcommand{\enxueke}{Science}
+\newcommand{\enxk}   {Sci}
+\fi
+
+\ifx \xueke \xuekeManagement
+\newcommand{\cnxueke}{管理学}
+\newcommand{\enxueke}{Management}
+\newcommand{\enxk}   {Man}
+\fi
+
+\ifx \xueke \xuekeArts
+\newcommand{\cnxueke}{文学}
+\newcommand{\enxueke}{Arts}
+\newcommand{\enxk}   {Art}
+\fi
+
+\ifx \xueke \xuekePhilosophy
+\newcommand{\cnxueke}{哲学}
+\newcommand{\enxueke}{Philosophy}
+\newcommand{\enxk}   {Phi}
+\fi
+
+\ifx \xueke \xuekeEconomics
+\newcommand{\cnxueke}{经济学}
+\newcommand{\enxueke}{Economics}
+\newcommand{\enxk}   {Eco}
+\fi
+
+\ifx \xueke \xuekeLaws
+\newcommand{\cnxueke}{法学}
+\newcommand{\enxueke}{Laws}
+\newcommand{\enxk}   {Law}
+\fi
+
+\ifx \xueke \xuekeEducation
+\newcommand{\cnxueke}{教育学}
+\newcommand{\enxueke}{Education}
+\newcommand{\enxk}   {Edu}
+\fi
+
+\ifx \xueke \xuekeHistory
+\newcommand{\cnxueke}{历史学}
+\newcommand{\enxueke}{History}
+\newcommand{\enxk}   {His}
+\fi
+
+% 定义、定理等环境
+\theoremstyle{plain}
+\theoremheaderfont{\hei\bf}
+\theorembodyfont{\song\rmfamily}
+\newtheorem{definition}{\hei 定义}[chapter]
+\newtheorem{example}{\hei 例}[chapter]
+\newtheorem{algorithm}{\hei 算法}[chapter]
+\newtheorem{theorem}{\hei 定理}[chapter]
+\newtheorem{axiom}{\hei 公理}[chapter]
+\newtheorem{proposition}[theorem]{\hei 命题}
+\newtheorem{property}{\hei 性质}
+\newtheorem{lemma}[theorem]{\hei 引理}
+\newtheorem{corollary}{\hei 推论}[chapter]
+\newtheorem{remark}{\hei 注解}[chapter]
+\newenvironment{proof}{\hei{证明}　}{\hfill $\square$ \vskip 4mm}
+
+% 目录标题
+\renewcommand{\contentsname}{\hfill \hei 目~~~~录 \hfill}
+\renewcommand{\listfigurename}{\hfill 插~图~目~录 \hfill}
+\renewcommand{\listtablename}{\hfill 表~格~目~录 \hfill}
+\renewcommand{\bibname}{\hfill 参~考~文~献 \hfill}
+\renewcommand\appendixname{附~录}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 段落章节相关
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\setcounter{secnumdepth}{4}
+\setcounter{tocdepth}{4}
+\setcounter{chapter}{0}
+
+% 设置章、节、小节、小小节的间距
+%\titleformat{\chapter}[hang]{\normalfont\xiaosan\hei\sf}{\xiaosan\thechapter}{1em}{\xiaosan}
+\titleformat{\chapter}{\centering\xiaoer\hei\sf}{第\,\thechapter\,章}{1em}{} % 设置中文章格式中央对齐：第  章
+\titlespacing{\chapter}{0pt}{-3ex  plus .1ex minus .2ex}{3.3ex}
+\titleformat{\section}[hang]{\xiaosan\hei\sf}{\xiaosan\thesection}{1em}{}{}
+\titlespacing{\section}{0pt}{0.5em}{0.5em}
+\titleformat{\subsection}[hang]{\sihao\hei\sf}{\sihao\thesubsection}{1em}{}{}
+\titlespacing{\subsection}{0pt}{0.5em}{0.3em}
+\titleformat{\subsubsection}[hang]{\xiaosi\hei\sf}{\xiaosi\thesubsubsection}{1em}{}{}
+\titlespacing{\subsubsection}{0pt}{0.3em}{0pt}
+
+% 缩小目录中各级标题之间的缩进
+% \dottedcontents{<section>}[<left>]{<above>}{<labelwidth>}{<leaderwidth>}
+\dottedcontents{chapter}[3mm]{\vspace{0.2em}}{1.0em}{5pt}
+\dottedcontents{section}[13mm]{}{1.8em}{5pt}
+\dottedcontents{subsection}[23mm]{}{2.7em}{5pt}
+\dottedcontents{subsubsection}[33mm]{}{3.4em}{5pt}
+
+% 设置目录中各级标题之间的缩进
+\makeatletter
+\renewcommand*{\l@chapter}{\@dottedtocline{0}{0em}{5em}}% 细点\@dottedtocline  粗点\@dottedtoclinebold
+\renewcommand*{\l@section}{\@dottedtocline{1}{1em}{1.8em}}
+\renewcommand*{\l@subsection}{\@dottedtocline{2}{2em}{2.5em}}
+\renewcommand*{\l@subsubsection}{\@dottedtocline{3}{2em}{2.5em}}
+
+% 设置章标题格式
+% \titlecontents{章节名称}[左端距离]{标题字体、与上文间距等}{标题序号}{空}{引导符和页码}[与下文间距]
+\titlecontents{chapter}[3.8em]{\hspace{-3.8em}\hei}{第~\thecontentslabel~章~~}{}{\titlerule*[4pt]{.}\contentspage}
+
+% 段落之间的竖直距离
+\setlength{\parskip}{1.2pt}
+% 段落缩进
+\setlength{\parindent}{24pt}
+% 定义行距
+\renewcommand{\baselinestretch}{1.25}
+% 参考文献条目间行间距
+\setlength{\bibsep}{2pt}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 页眉页脚设置
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\makeheadrule}{%
+    \rule[12pt]{\textwidth}{0.5pt} \\[-23pt]
+    \rule{\textwidth}{2.0pt}
+  \vskip-.8\baselineskip}
+
+\makeatletter
+\renewcommand{\headrule}{%
+  {\if@fancyplain\let\headrulewidth\plainheadrulewidth\fi
+    \makeheadrule}}
+
+\pagestyle{fancyplain}
+
+%去掉章节标题中的数字
+%%不要注销这一行，否则页眉会变成：“第1章1  绪论”样式
+\renewcommand{\chaptermark}[1]{\markboth{第\thechapter 章~~~~\ #1}{}}
+\fancyhf{}
+
+% 附录设置：附录不编章节号，但列入目录和页眉
+\renewcommand{\appendix}[1]{%
+    \chapter*{#1}%
+    \addcontentsline{toc}{chapter}{#1}%
+    \markboth{#1}{#1}
+}
+
+%在book文件类别下,\leftmark自动存录各章之章名,\rightmark记录节标题
+%根据单双面打印设置不同的页眉；
+\fancyhead[CO]{\song\xiaosi{\leftmark}}
+\fancyhead[CE]{\song\xiaosi{\@cnuniversty\cnxuewei 学位论文}}
+\fancyfoot[C,C]{\xiaosi$-$~\thepage~$-$}
+
+%偶数页为空白页面时处理
+\makeatletter
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else%
+  \hbox{}%
+%  \thispagestyle{empty}%   % 清除页眉、页脚
+  \vspace*{80mm}
+  \centerline{\xiaoer\song {{（此页无正文）}}}
+  \centerline{\xiaosi\song {{(THIS PAGE IS INTENTIONALLY LEFT BLANK)}}}
+  \newpage%
+  \if@twocolumn\hbox{}\newpage\fi\fi\fi}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 列表环境设置
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\setlist[enumerate]{(1),itemsep=-5pt,topsep=0mm,labelindent=\parindent,leftmargin=*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 国际单位，以点连接。
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\sisetup{inter-unit-product = { }\cdot{ }}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 参考文献的处理
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \addtolength{\bibsep}{-0.5 em}      % 缩小参考文献间的垂直间距
+% 上标引用，比\cite位置更偏上、字号稍小
+\DeclareRobustCommand\scite{\@scite}
+\def\@scite#1{\textsuperscript{\cite{#1}}}
+% 行间引用，与正文格式一致
+\DeclareRobustCommand\lcite{\@lcite}
+\def\@lcite#1{\begingroup\let\@cite\NAT@citenum\citep{#1}\endgroup}
+
+\setlength{\bibhang}{2em}
+\bibpunct{[}{]}{,}{s}{}{}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   其他设置
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 使图编号为 7-1 的格式 %\protect{~}
+\renewcommand{\thefigure}{\arabic{chapter}-\arabic{figure}}
+% 使子图编号为 (a)的格式
+\renewcommand{\thesubfigure}{(\alph{subfigure})}
+% 使子图引用为 7-1 (a) 的格式，母图编号和子图编号之间用~加一个空格
+\renewcommand{\p@subfigure}{\thefigure~}
+% 使表编号为 7-1 的格式
+\renewcommand{\thetable}{\arabic{chapter}-\arabic{table}}
+% 使公式编号为 7-1 的格式
+\renewcommand{\theequation}{\arabic{chapter}-\arabic{equation}}
+
+%插图索引格式: 图 x. 图标题 ......页码
+\renewcommand\listoffigures{%
+    \chapter*{\listfigurename}%
+    \addcontentsline{toc}{chapter}{插图目录}
+    \markboth{\listfigurename}{\listfigurename}
+    \renewcommand{\numberline}[1]{图~##1~~}
+    \@starttoc{lof}%
+    }
+
+%表格索引格式: 表 x. 表标题 ......页码
+\renewcommand\listoftables{%
+    \chapter*{\listtablename}%
+    \addcontentsline{toc}{chapter}{表格目录}
+    \markboth{\listtablename}{\listtablename}
+    \renewcommand{\numberline}[1]{表~##1~~}
+    \@starttoc{lot}%
+    }
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   图形表格
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+% \captionstyle{\centering}
+% \hangcaption
+\captiondelim{\hspace{1em}}
+\captiondelim{\hspace{1em}}
+\captionnamefont{\zhongwu}
+\captiontitlefont{\zhongwu}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{0pt}
+
+\newcommand{\tablepage}[2]{\begin{minipage}{#1}\vspace{0.5ex} #2 \vspace{0.5ex}\end{minipage}}
+\newcommand{\returnpage}[2]{\begin{minipage}{#1}\vspace{0.5ex} #2 \vspace{-1.5ex}\end{minipage}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   脚注格式设置
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %使用pifont包里面ding产生带圈的数字1~10
+\newcommand\chnnocirc[1]{%
+\ifcase#1 a \or {\ding{172}} \or {\ding{173}} \or {\ding{174}} \or {\ding{175}} \or {\ding{176}} \or {\ding{177}} \or {\ding{178}} \or {\ding{179}} \or {\ding{180}}\fi}
+\renewcommand{\thefootnote}{\chnnocirc{\arabic{footnote}}}
+
+% 自定义一个空命令，用于注释掉文本中不需要的部分。
+\newcommand{\comment}[1]{}
+
+% 双语章节重新定义BiChapter、BiSection等命令，可实现标题手动换行，但不影响目录
+\def\BiChapter{\relax\@ifnextchar [{\@BiChapter}{\@@BiChapter}}
+\def\@BiChapter[#1]#2#3{\chapter[#1]{#2}
+    \addcontentsline{toe}{chapter}{\bfseries \xiaosi Chapter \thechapter\hspace{0.5em} #3}}
+\def\@@BiChapter#1#2{\chapter{#1}
+    \addcontentsline{toe}{chapter}{\bfseries \xiaosi Chapter \thechapter\hspace{0.5em}{\boldmath #2}}}
+
+\newcommand{\BiSection}[2]
+{   \section{#1}
+    \addcontentsline{toe}{section}{\protect\numberline{\csname thesection\endcsname}#2}
+}
+
+\newcommand{\BiSubsection}[2]
+{    \subsection{#1}
+    \addcontentsline{toe}{subsection}{\protect\numberline{\csname thesubsection\endcsname}#2}
+}
+
+\newcommand{\BiSubsubsection}[2]
+{    \subsubsection{#1}
+    \addcontentsline{toe}{subsubsection}{\protect\numberline{\csname thesubsubsection\endcsname}#2}
+}
+
+\newcommand{\BiAppendix}[2] % 该附录命令适用于发表文章，简历等
+{\phantomsection
+\markboth{#1}{#1}
+\addcontentsline{toc}{chapter}{\xiaosi #1}
+\addcontentsline{toe}{chapter}{\bfseries \xiaosi #2}  \chapter*{#1}
+}
+
+\newcommand{\BiAppChapter}[2]    % 该附录命令适用于有章节的完整附录
+{\phantomsection
+ \chapter{#1}
+ \addcontentsline{toe}{chapter}{\bfseries \xiaosi Appendix \thechapter~~#2}
+}
+
+\def\engcontentsname{\uppercase{CONTENTS}}
+\newcommand\tableofengcontents{
+   \pdfbookmark[0]{\uppercase{CONTENTS}}{encontent}
+   \chapter*{\engcontentsname  %chapter*上移一行，避免在toc中出现
+       \@mkboth{%
+          \engcontentsname}{\engcontentsname}}
+   \@starttoc{toe}%
+}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 封面摘要
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\def\cnauthorno#1{\def\@cnauthorno{#1}}\def\@cnauthorno{}
+
+\def\cntitle#1{\def\@cntitle{#1}}\def\@cntitle{}
+\def\cnaffil#1{\def\@cnaffil{#1}}\def\@cnaffil{}
+\def\cnsubject#1{\def\@cnsubject{#1}}\def\@cnsubject{}
+\def\cnauthor#1{\def\@cnauthor{#1}}\def\@cnauthor{}
+\def\cnsupervisor#1{\def\@cnsupervisor{#1}}\def\@cnsupervisor{}
+\def\cnsupervisortitle#1{\def\@cnsupervisortitle{#1}}\def\@cnsupervisortitle{}
+\def\cnsubdate#1{\def\@cnsubdate{#1}}\def\@cnsubdate{}
+\def\cndefdate#1{\def\@cndefdate{#1}}\def\@cndefdate{}
+\long\def\cnabstract#1{\long\def\@cnabstract{#1}}\long\def\@cnabstract{}
+\def\cnkeywords#1{\def\@cnkeywords{#1}}\def\@cnkeywords{}
+\def\cnreviewer#1{\def\@cnreviewer{#1}}\def\@cnreviewer{}
+
+\def\entitle#1{\def\@entitle{#1}}\def\@entitle{}
+\def\enaffil#1{\def\@enaffil{#1}}\def\@enaffil{}
+\def\ensubject#1{\def\@ensubject{#1}}\def\@ensubject{}
+\def\enauthor#1{\def\@enauthor{#1}}\def\@enauthor{}
+\def\ensupervisor#1{\def\@ensupervisor{#1}}\def\@ensupervisor{}
+\def\ensupervisortitle#1{\def\@ensupervisortitle{#1}}\def\@ensupervisortitle{}
+\def\ensubdate#1{\def\@ensubdate{#1}}\def\@ensubdate{}
+\def\endefdate#1{\def\@endefdate{#1}}\def\@endefdate{}
+\long\def\enabstract#1{\long\def\@enabstract{#1}}\long\def\@enabstract{}
+\def\enkeywords#1{\def\@enkeywords{#1}}\def\@enkeywords{}
+\def\enreviewer#1{\def\@enreviewer{#1}}\def\@enreviewer{}
+
+\long\def\NotationList#1{\long\def\@NotationList{#1}}\long\def\@NotationList{}
+\long\def\cnauthorization#1{\long\def\@cnauthorization{#1}}\long\def\@cnauthorization{}
+
+\def\natclassifiedindex#1{\def\@natclassifiedindex{#1}}\def\@natclassifiedindex{}
+\def\internatclassifiedindex#1{\def\@internatclassifiedindex{#1}}\def\@internatclassifiedindex{}
+
+\def\studentno#1{\def\@studentno{#1}}\def\@studentno{}
+
+\def\cnstatesecrets#1{\def\@cnstatesecrets{#1}}\def\@cnstatesecrets{}
+\def\enstatesecrets#1{\def\@enstatesecrets{#1}}\def\@enstatesecrets{}
+
+\def\cnuniversty#1{\def\@cnuniversty{#1}}\def\@cnuniversty{}
+\def\enuniversty#1{\def\@euniversity{#1}}\def\@euniversity{}
+
+% 封面
+\def\makecover{
+  \begin{titlepage}
+    \newpage
+    \thispagestyle{empty}
+    \begin{center}
+    \ifxueweidoctor
+            \vspace*{5mm}
+            \renewcommand{\arraystretch}{1.5}
+            \song \xiaosi{
+                \begin{tabular}{@{}r@{：}l@{}}
+                    分类号               & \underline{\makebox[6em][c]{\@natclassifiedindex}} \\
+                    U \hfill D \hfill  C & \underline{\makebox[6em][c]{\@internatclassifiedindex}}
+                \end{tabular}}\hfill
+            \song \xiaosi{
+                \begin{tabular}{@{}r@{：}l@{}}
+                    密 \ 级 & \underline{\makebox[6em][c]{\@cnstatesecrets}} \\
+                    编 \ 号 & \underline{\makebox[6em][c]{\@studentno}}
+                \end{tabular}}
+            \renewcommand{\arraystretch}{1}
+
+            \vspace*{20mm}
+            \centerline{\xiaoer\song {\cnxueke\cnxuewei{学位论文}}}
+            \vspace{5mm}
+
+            \parbox[t][30mm][t]{\textwidth}{
+            \begin{center}\erhao\hei{\@cntitle}\end{center} }
+
+            \vspace*{30mm}
+             \parbox[t][40mm][b]{\textwidth}
+              {\xiaosan
+             \begin{center} \renewcommand{\arraystretch}{1.25} \song
+                 \begin{tabular}{l@{：}l}
+                 {\xiaosan 博 \hfill 士 \hfill 研\hfill 究\hfill 生}  & \@cnauthor      \ \\
+                 {\xiaosan 指 \hfill 导 \hfill 教 \hfill 师}          & \@cnsupervisor  \\
+                 {\xiaosan 学 \hfill 科 \hfill 专 \hfill 业}          & \@cnsubject \\
+                 {\xiaosan 学位论文主审人}                            & \@cnreviewer
+                 \end{tabular} \renewcommand{\arraystretch}{1}
+             \end{center} }
+        \fi
+
+        \ifxueweimaster
+            \vspace*{5mm}
+            \renewcommand{\arraystretch}{1.5}
+            \song \xiaosi{
+                \begin{tabular}{@{}r@{：}l@{}}
+                    分类号               & \underline{\makebox[6em][c]{\@natclassifiedindex}} \\
+                    U \hfill D \hfill  C & \underline{\makebox[6em][c]{\@internatclassifiedindex}}
+                \end{tabular}}\hfill
+            \song \xiaosi{
+                \begin{tabular}{@{}r@{：}l@{}}
+                    密 \ 级 & \underline{\makebox[6em][c]{\@cnstatesecrets}} \\
+                    编 \ 号 & \underline{\makebox[6em][c]{\@studentno}}
+                \end{tabular}}
+            \renewcommand{\arraystretch}{1}
+
+            \vspace*{20mm}
+            \centerline{\xiaoer\song {\cnxueke\cnxuewei{学位论文}}}
+            \vspace{5mm}
+
+            \parbox[t][30mm][t]{\textwidth}{
+            \begin{center}\erhao\hei{\@cntitle}\end{center} }
+
+            \vspace*{30mm}
+             \parbox[t][40mm][b]{\textwidth}
+              {\xiaosan
+             \begin{center} \renewcommand{\arraystretch}{1.25} \song
+                 \begin{tabular}{l@{：}l}
+                 {\xiaosan 硕 \hfill 士 \hfill 研\hfill 究\hfill 生}  & \@cnauthor      \\
+                 {\xiaosan 指 \hfill 导 \hfill 教 \hfill 师}          & \@cnsupervisor  \\
+                 {\xiaosan 学 \hfill 科 \hfill 专 \hfill 业}          & \@cnsubject \\
+                 {\xiaosan 学位论文主审人}                            & \@cnreviewer
+                 \end{tabular} \renewcommand{\arraystretch}{1}
+             \end{center} }
+        \fi
+
+        \ifxueweibachelor
+            \vspace*{5mm}
+            \renewcommand{\arraystretch}{1.5}
+            {\song \xiaosi
+                \begin{tabular}{@{}r@{：}l@{}}
+                    ~ & ~ \\
+                    ~ & ~
+                \end{tabular}}\hfill
+            {\song \xiaosi
+                \begin{tabular}{@{}r@{：}l@{}}
+                    密 \ 级 & \underline{\makebox[6em][c]{\@cnstatesecrets}} \\
+                    学 \ 号 & \underline{\makebox[6em][c]{\@studentno}}
+                \end{tabular}}
+            \renewcommand{\arraystretch}{1}
+
+            \vspace*{20mm}
+            \centerline{\xiaoer\song {\@cnuniversty\cnxuewei{学位论文}}}
+            \vspace{5mm}
+
+            \parbox[t][30mm][t]{\textwidth}{
+            \begin{center}\erhao\hei{\@cntitle}\end{center} }
+
+             \vspace*{30mm}
+             \parbox[t][40mm][b]{\textwidth}
+              {\xiaosan
+             \begin{center} \renewcommand{\arraystretch}{1.25} \song
+                 \begin{tabular}{l@{：}l}
+                 {\xiaosan 院（系）名称院}                 & \@cnaffil  \\
+                 {\xiaosan 专\hfill 业\hfill 名\hfill 称}  & \@cnsubject \\
+                 {\xiaosan 学\hfill 生\hfill 姓\hfill 名}  & \@cnauthor \\
+                 {\xiaosan 指\hfill 导\hfill 教\hfill 师}  & \@cnsupervisor
+                 \end{tabular} \renewcommand{\arraystretch}{1}
+             \end{center} }
+        \fi
+
+      \vspace{30mm}
+
+      {
+        \xiaoer\kai {\@cnuniversty} \\
+        \vspace{4mm}
+        \xiaosan\song {\@cnsubdate}
+      }
+    \end{center}
+
+    % 双面打印时封面后加空白页
+    \ifoneortwosidetwoside
+      \newpage
+      ~~~\vspace{1em}
+      \thispagestyle{empty}
+    \fi
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+    %内封（扉页）
+    \newpage
+    \thispagestyle{empty}
+    \pdfbookmark[0]{\@cntitle}{cntitlepage}
+    \begin{center}
+        \ifxueweidoctor
+            \vspace*{5mm}
+            \begin{center}
+                \renewcommand{\arraystretch}{1.5}
+                {\song \xiaosi
+                    \begin{tabular}{@{}r@{：}l@{}}
+                        分类号              & \underline{\makebox[6em][c]{\@natclassifiedindex}} \\
+                        U \hfill D \hfill C & \underline{\makebox[6em][c]{\@internatclassifiedindex}}
+                    \end{tabular}}\hfill
+                {\song \xiaosi
+                    \begin{tabular}{@{}r@{：}l@{}}
+                        密 \ 级 & \underline{\makebox[6em][c]{\@cnstatesecrets}} \\
+                        编 \ 号 & \underline{\makebox[6em][c]{\@studentno}}
+                    \end{tabular}}
+                \renewcommand{\arraystretch}{1}
+
+                \vspace*{20mm}
+
+                \centerline{\song\xiaoer{\cnxueke\cnxuewei{学位论文}}}
+                \vspace{5mm}
+                \parbox[t][30mm][t]{\textwidth}{
+                \begin{center}\erhao\hei{\@cntitle}\end{center}}
+
+                \vspace*{20mm}
+
+                \parbox[t][80mm][b]{\textwidth}
+                 {\sihao
+                \begin{center} \renewcommand{\arraystretch}{1.25} \song
+                \begin{tabular}{l@{：}l}
+                    \textbf{\sihao 博\hfill 士\hfill 研\hfill 究\hfill 生} & \@cnauthor  \\
+                    \textbf{\sihao 指\hfill 导\hfill 教\hfill 师}          & \@cnsupervisor  \\
+                    \textbf{\sihao 学\hfill 位\hfill 级\hfill 别}          & \cnxueke\cnxuewei  \\
+                    \textbf{\sihao 学\hfill 科\hfill 专\hfill 业}          & \@cnsubject  \\
+                    \textbf{\sihao 所\hfill 在\hfill 单\hfill 位}          & \@cnaffil  \\
+                    \textbf{\sihao 论文提交日期}                           & \@cnsubdate  \\
+                    \textbf{\sihao 论文答辩日期}                           & \@cndefdate  \\
+                    \textbf{\sihao 学位授予单位}                           & {\@cnuniversty}
+                \end{tabular} \renewcommand{\arraystretch}{1}
+                \end{center}}
+            \end{center}
+        \fi
+
+        \ifxueweimaster
+            \vspace*{5mm}
+            \begin{center}
+                \renewcommand{\arraystretch}{1.5}
+                {\song \xiaosi
+                    \begin{tabular}{@{}r@{：}l@{}}
+                        分类号              & \underline{\makebox[6em][c]{\@natclassifiedindex}} \\
+                        U \hfill D \hfill C & \underline{\makebox[6em][c]{\@internatclassifiedindex}}
+                    \end{tabular}}\hfill
+                {\song \xiaosi
+                    \begin{tabular}{@{}r@{：}l@{}}
+                        密 \ 级 & \underline{\makebox[6em][c]{\@cnstatesecrets}} \\
+                        编 \ 号 & \underline{\makebox[6em][c]{\@studentno}}
+                    \end{tabular}}
+                \renewcommand{\arraystretch}{1}
+
+                \vspace*{20mm}
+                \centerline{\xiaoer\song {\cnxueke\cnxuewei{学位论文}}}
+                \vspace*{5mm}
+                \parbox[t][30mm][t]{\textwidth}{
+                \begin{center}\erhao\hei{\@cntitle}\end{center}}
+
+                \vspace*{20mm}
+
+                \parbox[t][80mm][b]{\textwidth}
+                 {\sihao
+                \begin{center} \renewcommand{\arraystretch}{1.25} \song
+                \begin{tabular}{l@{：}l}
+                    \textbf{\sihao 硕\hfill 士\hfill 研\hfill 究\hfill 生} & \@cnauthor  \\
+                    \textbf{\sihao 指\hfill 导\hfill 教\hfill 师}          & \@cnsupervisor  \\
+                    \textbf{\sihao 学\hfill 位\hfill 级\hfill 别}          & \cnxueke\cnxuewei  \\
+                    \textbf{\sihao 学\hfill 科\hfill 专\hfill 业}          & \@cnsubject  \\
+                    \textbf{\sihao 所\hfill 在\hfill 单\hfill 位}          & \@cnaffil  \\
+                    \textbf{\sihao 论文提交日期}                           & \@cnsubdate  \\
+                    \textbf{\sihao 论文答辩日期}                           & \@cndefdate  \\
+                    \textbf{\sihao 学位授予单位}                           & {\@cnuniversty}
+                \end{tabular} \renewcommand{\arraystretch}{1}
+                \end{center}}
+            \end{center}
+        \fi
+
+        \ifxueweibachelor
+            \vspace*{5mm}
+            \begin{center}
+                \renewcommand{\arraystretch}{1.5}
+                {\song \xiaosi
+                    \begin{tabular}{@{}r@{：}l@{}}
+                        ~ & ~ \\
+                        ~ & ~
+                    \end{tabular}}\hfill
+                {\song \xiaosi
+                    \begin{tabular}{@{}r@{：}l@{}}
+                        密 \ 级 & \underline{\makebox[6em][c]{\@cnstatesecrets}} \\
+                        学 \ 号 & \underline{\makebox[6em][c]{\@studentno}}
+                    \end{tabular}}
+                \renewcommand{\arraystretch}{1}
+
+                \vspace*{20mm}
+
+                \parbox[t][30mm][t]{\textwidth}{
+                \begin{center}\erhao\hei{\@cntitle}\end{center}}
+                \vspace*{5mm}
+                \parbox[t][30mm][t]{\textwidth}{
+                \begin{center}\erhao\hei{\@entitle}\end{center}}
+
+                \vspace*{20mm}
+
+                \parbox[t][80mm][b]{\textwidth}
+                 {\sihao
+                \begin{center} \renewcommand{\arraystretch}{1.25} \song
+                \begin{tabular}{l@{：}l}
+                    \textbf{\sihao 学\hfill 生\hfill 姓\hfill 名}  & \@cnauthor  \\
+                    \textbf{\sihao 所\hfill 在\hfill 学\hfill 院}  & \@cnaffil  \\
+                    \textbf{\sihao 所\hfill 在\hfill 专\hfill 业}  & \@cnsubject  \\
+                    \textbf{\sihao 指\hfill 导\hfill 教\hfill 师}  & \@cnsupervisor  \\
+                    \textbf{\sihao 职\hfill                   称}  & \@cnsupervisortitle \\
+                    \textbf{\sihao 所\hfill 在\hfill 单\hfill 位}  & \@cnaffil  \\
+                    \textbf{\sihao 论文提交日期}                   & \@cnsubdate  \\
+                    \textbf{\sihao 论文答辩日期}                   & \@cndefdate  \\
+                    \textbf{\sihao 学位授予单位}                   & {\@cnuniversty}
+                \end{tabular} \renewcommand{\arraystretch}{1}
+                \end{center}}
+            \end{center}
+        \fi
+      \end{center}
+
+    % 双面打印时封面后加空白页
+    \ifoneortwosidetwoside
+      \newpage
+      ~~~\vspace{1em}
+      \thispagestyle{empty}
+    \fi
+
+% % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % % %
+    % 英文封面
+     \begin{center}
+        \ifxueweidoctor
+            \newpage
+            \thispagestyle{empty}
+            \pdfbookmark[0]{\uppercase{\@entitle}}{entitlepage}
+            \vspace*{5mm}
+            \begin{center}
+                \renewcommand{\arraystretch}{1.5}
+                {\song \xiaosi
+                    \begin{tabular}{@{}r@{：}l@{}}
+                        Classif\/ied Index & \@natclassifiedindex \\
+                        U.D.C              & \@internatclassifiedindex
+                    \end{tabular}}\hfill
+                {\song \xiaosi
+                    \begin{tabular}{@{}r@{ }l@{}}
+                        ~ & ~ \\
+                        ~ & ~
+                    \end{tabular}}
+                \renewcommand{\arraystretch}{1}
+
+                \vspace*{30mm}
+
+                \centerline{\song\xiaoer{A Dissertation for the Degree of D.\enxk }}
+                \vspace*{5mm}
+                \parbox[t][30mm][t]{\textwidth}{\erhao
+                \begin{center} {\bfseries \@entitle}\end{center}}
+
+                \vspace*{20mm}
+
+                \parbox[t][80mm][t]{\textwidth}
+                {\sihao\renewcommand{\arraystretch}{1.25}
+                \begin{tabular}{r@{\textbf ~:~ }l@{~}}
+                \textbf{Candidate}                     &  \@enauthor  \\
+                \textbf{Supervisor}                    &  \@ensupervisor\\
+                \textbf{Academic Degree Applied for}   &  \enxuewei~of~\enxueke \\
+                \textbf{Specialty}                     &  \@ensubject  \\
+                \textbf{Affiliation}                   &  \@enaffil  \\
+                \textbf{Date of Defence}               &  \@endefdate  \\
+                \textbf{Degree-Conferring-Institution} &  \@euniversity
+                \end{tabular}\renewcommand{\arraystretch}{1}
+                }
+            \end{center}
+            % 双面打印时封面后加空白页
+            \ifoneortwosidetwoside
+              \newpage
+              ~~~\vspace{1em}
+              \thispagestyle{empty}
+            \fi
+        \fi
+
+        \ifxueweimaster
+            \newpage
+            \thispagestyle{empty}
+            \pdfbookmark[0]{\uppercase{\@entitle}}{entitlepage}
+            \vspace*{5mm}
+            \begin{center}
+                \renewcommand{\arraystretch}{1.5}
+                {\song \xiaosi
+                    \begin{tabular}{@{}r@{ }l@{}}
+                        ~ & ~ \\
+                        ~ & ~
+                    \end{tabular}}\hfill
+                {\song \xiaosi
+                    \begin{tabular}{@{}r@{：}l@{}}
+                        Classif\/ied Index & \@natclassifiedindex \\
+                        U.D.C              & \@internatclassifiedindex
+                    \end{tabular}}
+                \renewcommand{\arraystretch}{1}
+
+                \vspace*{20mm}
+
+                \centerline{\song\xiaoer{A Dissertation for the Degree of M.\enxk }}
+                \vspace*{5mm}
+                \parbox[t][30mm][t]{\textwidth}{\erhao
+                \begin{center} {\bfseries \@entitle}\end{center}}
+
+                \vspace*{30mm}
+
+                \parbox[t][80mm][t]{\textwidth}
+                {\sihao\renewcommand{\arraystretch}{1.25}
+                \begin{tabular}{r@{\textbf ~:~ }l@{~}}
+                \textbf{Candidate}                     &  \@enauthor  \\
+                \textbf{Supervisor}                    &  \@ensupervisor\\
+                \textbf{Academic Degree Applied for}   &  \enxuewei~of~\enxueke \\
+                \textbf{Specialty}                     &  \@ensubject  \\
+                \textbf{Date of Submission}            &  \@ensubdate  \\
+                \textbf{Date of Oral Examination}      &  \@endefdate  \\
+                \textbf{University}                    &  \@euniversity
+                \end{tabular}\renewcommand{\arraystretch}{1}
+                }
+            \end{center}
+
+            % 双面打印时封面后加空白页
+            \ifoneortwosidetwoside
+              \newpage
+              ~~~\vspace{1em}
+              \thispagestyle{empty}
+            \fi
+        \fi
+
+      \end{center}
+    \cleardoublepage
+  \end{titlepage}
+}
+
+% 原创性与使用授权说明
+\def\authorization
+{
+    \thispagestyle{empty}
+    \@cnauthorization
+    \clearpage
+
+    % 双面打印时加空白页
+    \ifoneortwosidetwoside
+      \newpage
+      ~~~\vspace{1em}
+      \thispagestyle{empty}
+    \fi
+}
+
+\def\makeabstract{
+  \defaultfont
+  \chapter*{摘　　要}
+  \addcontentsline{toc}{chapter}{摘　　要}
+  \markboth{摘　　要}{摘　　要}
+  \setcounter{page}{1}
+
+  \@cnabstract
+  \vspace{5mm}
+
+  \noindent {\hei{关键词：{\fs\@cnkeywords}}}
+  \defaultfont
+  \cleardoublepage
+
+  \chapter*{ABSTRACT}
+  \addcontentsline{toc}{chapter}{ABSTRACT}
+  \markboth{ABSTRACT}{ABSTRACT}
+
+  \@enabstract
+  \vspace{5mm}
+
+  \noindent {\textbf{Key Words:}}~~{\textsf{\@enkeywords}}
+  \defaultfont
+  \cleardoublepage
+}
+
+\makeatletter
+\def\hlinewd#1{%
+  \noalign{\ifnum0=`}\fi\hrule \@height #1 \futurelet
+  \reserved@a\@xhline}
+\makeatother
+
+% 定义索引生成
+\def\generateindex
+{
+  \addcontentsline{toc}{chapter}{\indexname}
+  \printindex
+  \cleardoublepage
+}
+
+\raggedbottom 
